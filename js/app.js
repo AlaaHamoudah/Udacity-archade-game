@@ -64,6 +64,7 @@ Enemy.prototype.update = function(dt) {
     if (this.col === player.col && this.row === player.row) {
       player.reset();
       allEnemies = [];
+      allGems = [];
     }
   }
 };
@@ -83,11 +84,15 @@ class Player {
     this.sprite = "images/char-cat-girl.png";
     this.row = 6;
     this.col = 3;
+    this.score = 0;
   }
   update() {
     if (this.row === 1) {
       this.reset();
       allEnemies = [];
+      allGems = [];
+ 
+      
     }
   }
   render() {
@@ -97,16 +102,15 @@ class Player {
   handleInput(keyCode) {
     switch (keyCode) {
       case "left":
-        this.x = this.x - 101;
+        this.x = this.x - 100;
         this.col -= 1;
-        console.log("done");
         break;
       case "up": //up
         this.y = this.y - 83;
         this.row -= 1;
         break;
       case "right": //right
-        this.x = this.x + 101;
+        this.x = this.x + 100;
         this.col += 1;
 
         break;
@@ -115,6 +119,16 @@ class Player {
         this.row += 1;
         break;
     }
+    console.log(
+      "player x " +
+        this.x +
+        "y " +
+        this.y +
+        " row " +
+        this.row +
+        " col " +
+        this.col
+    );
   }
   //Resets the location of the player
   reset() {
@@ -138,15 +152,85 @@ class Gem {
     this.initiaYlLocationArray = [55, 145, 245];
     // location of enemy on the Y axis
     this.y = this.initiaYlLocationArray[this.ranNumForLocation];
-    this.initiaXlLocationArray = [101, 202, 303, 404, 505];
+    //this.y = this.initiaYlLocationArray[0];
+    this.initiaXlLocationArray = [0, 100, 200, 300, 400];
     this.ranNumForLocation = Math.floor(Math.random() * 5);
     this.x = this.initiaXlLocationArray[this.ranNumForLocation];
+    //this.x = this.initiaXlLocationArray[4];
   }
 
-  update() {}
+  update() {
+    // Changes the column based on the location of the gem
+    switch (this.y) {
+      case 55:
+        this.row = 2;
+        break;
+      case 145:
+        this.row = 3;
+        break;
+      case 245:
+        this.row = 4;
+    }
+    // Changes the row based on the location of the gem
+    // switch (this.x) {
+    //   case 0:
+    //     this.col = 1;
+    //     break;
+    //   case 100:
+    //     this.col = 2;
+    //     break;
+    //   case 200:
+    //     this.col = 3;
+    //   case 300:
+    //     this.col = 4;
+    //   case 400:
+    //     this.col = 5;
+    // }
+    // Sets the column based on the location of the enemy
+    if (this.x < 62) {
+      this.col = 1;
+    } else if (this.x < 163) {
+      this.col = 2;
+    } else if (this.x < 264) {
+      this.col = 3;
+    } else if (this.x < 365) {
+      this.col = 4;
+    } else if (this.x < 465) {
+      this.col = 5;
+    } else if (this.x < 510) {
+      this.col = 7;
+    }
+    //  console.log( this.sprite + "col "+ this.col + " row  "+ this.row + " x " + this.x + " y "+ this.y)
+
+    // Monitors collisions by comparing the player's and the gem's columns and rows
+    for (const gem of allGems) {
+      // console.log(" gem col"+ this.col + " gem row" + this.row , gem)
+      // console.log(" player col"+ player.col + " player row >>>>>>" + player.row)
+    
+      if (this.col === player.col && this.row === player.row) {
+        this.x = -200;
+        this.y = -200;
+        this.col = -1;
+        this.row = -1;
+        player.score++;
+        this.createNewGem(1);
+        //  console.log(" gem col"+ this.col + " gem row" + this.row , gem)
+        //  console.log(" player col"+ player.col + " player row >>>>>>" + player.row)
+        //   console.log("winnnnn score"+player.score)
+      }
+    }
+  }
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
+  createNewGem(limit){
+    for(let i= 0; i< limit ; i++){
+        allGems.push(new Gem())
+    }
+  }
+  reset(){
+    this.createNewGem(3) 
+ }
 }
 
 // Now instantiate your objects.
