@@ -119,16 +119,16 @@ class Player {
         this.row += 1;
         break;
     }
-    console.log(
-      "player x " +
-        this.x +
-        "y " +
-        this.y +
-        " row " +
-        this.row +
-        " col " +
-        this.col
-    );
+    // console.log(
+    //   "player x " +
+    //     this.x +
+    //     "y " +
+    //     this.y +
+    //     " row " +
+    //     this.row +
+    //     " col " +
+    //     this.col
+    // );
   }
   //Resets the location of the player
   reset() {
@@ -136,6 +136,8 @@ class Player {
     this.y = 380;
     this.row = 6;
     this.col = 3;
+    this.score = 0;
+    document.querySelector("#gems").innerHTML = "0";
   }
 }
 class Gem {
@@ -171,21 +173,6 @@ class Gem {
       case 245:
         this.row = 4;
     }
-    // Changes the row based on the location of the gem
-    // switch (this.x) {
-    //   case 0:
-    //     this.col = 1;
-    //     break;
-    //   case 100:
-    //     this.col = 2;
-    //     break;
-    //   case 200:
-    //     this.col = 3;
-    //   case 300:
-    //     this.col = 4;
-    //   case 400:
-    //     this.col = 5;
-    // }
     // Sets the column based on the location of the enemy
     if (this.x < 62) {
       this.col = 1;
@@ -213,6 +200,8 @@ class Gem {
         this.col = -1;
         this.row = -1;
         player.score++;
+        document.querySelector("#gems").innerHTML = player.score;
+
         this.createNewGem(1);
         //  console.log(" gem col"+ this.col + " gem row" + this.row , gem)
         //  console.log(" player col"+ player.col + " player row >>>>>>" + player.row)
@@ -230,6 +219,7 @@ class Gem {
   }
   reset(){
     this.createNewGem(3) 
+    
  }
 }
 
