@@ -1,6 +1,3 @@
-// const x_width = 101;
-// const y_height = 83;
-
 // Enemies our player must avoid
 var Enemy = function(x, y) {
   // Variables applied to each of our instances go here,
@@ -80,7 +77,6 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Player {
-
   constructor() {
     this.x = 200;
     this.y = 400;
@@ -90,9 +86,9 @@ class Player {
   }
   update() {
     if (this.row === 1) {
-        this.reset();
-        allEnemies = [];
-      }
+      this.reset();
+      allEnemies = [];
+    }
   }
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -101,33 +97,55 @@ class Player {
   handleInput(keyCode) {
     switch (keyCode) {
       case "left":
-        console.log("left key" + (this.x - x_width) + this.sprite);
-
         this.x = this.x - 101;
         this.col -= 1;
         console.log("done");
         break;
       case "up": //up
-      this.y = this.y - 83;
-          this.row -= 1;
+        this.y = this.y - 83;
+        this.row -= 1;
         break;
       case "right": //right
-      this.x = this.x + 101;
-      this.col += 1;
-        
+        this.x = this.x + 101;
+        this.col += 1;
+
         break;
       case "down": //down
-      this.y = this.y + 83;
-          this.row += 1;
+        this.y = this.y + 83;
+        this.row += 1;
         break;
     }
   }
-   //Resets the location of the player
-   reset() {
+  //Resets the location of the player
+  reset() {
     this.x = 200;
     this.y = 380;
     this.row = 6;
     this.col = 3;
+  }
+}
+class Gem {
+  constructor() {
+    this.x;
+    this.y;
+    this.col;
+    this.row;
+    this.isVisible;
+    this.gemInitialArray = ["Gem-Blue.png", "Gem-Orange.png", "Gem-Green.png"];
+    this.ranNumForLocation = Math.floor(Math.random() * 3);
+    this.sprite = `images/${this.gemInitialArray[this.ranNumForLocation]}`;
+    // an array of locations for the gems to start from
+    this.initiaYlLocationArray = [55, 145, 245];
+    // location of enemy on the Y axis
+    this.y = this.initiaYlLocationArray[this.ranNumForLocation];
+    this.initiaXlLocationArray = [101, 202, 303, 404, 505];
+    this.ranNumForLocation = Math.floor(Math.random() * 5);
+    this.x = this.initiaXlLocationArray[this.ranNumForLocation];
+  }
+
+  update() {}
+  render() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
 }
 
@@ -137,13 +155,18 @@ class Player {
 
 let allEnemies = [];
 setInterval(function() {
-    // create an enemy every second
-    let enemy = new Enemy();
-    // Place all enemy objects in an array called allEnemies
-    allEnemies.push(enemy);
-  }, 1000);
-  
+  // create an enemy every second
+  let enemy = new Enemy();
+  // Place all enemy objects in an array called allEnemies
+  allEnemies.push(enemy);
+}, 1000);
+
 let player = new Player();
+let allGems = [];
+
+allGems.push(new Gem());
+allGems.push(new Gem());
+allGems.push(new Gem());
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
