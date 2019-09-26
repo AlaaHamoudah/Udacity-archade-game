@@ -65,6 +65,8 @@ Enemy.prototype.update = function(dt) {
       player.reset();
       allEnemies = [];
       allGems = [];
+      Gem.reset(3);
+ 
     }
   }
 };
@@ -91,6 +93,7 @@ class Player {
       this.reset();
       allEnemies = [];
       allGems = [];
+      Gem.reset(4);
  
       
     }
@@ -119,16 +122,7 @@ class Player {
         this.row += 1;
         break;
     }
-    // console.log(
-    //   "player x " +
-    //     this.x +
-    //     "y " +
-    //     this.y +
-    //     " row " +
-    //     this.row +
-    //     " col " +
-    //     this.col
-    // );
+    
   }
   //Resets the location of the player
   reset() {
@@ -146,19 +140,20 @@ class Gem {
     this.y;
     this.col;
     this.row;
-    this.isVisible;
     this.gemInitialArray = ["Gem-Blue.png", "Gem-Orange.png", "Gem-Green.png"];
     this.ranNumForLocation = Math.floor(Math.random() * 3);
+    //randomly choose an image for the gem
     this.sprite = `images/${this.gemInitialArray[this.ranNumForLocation]}`;
-    // an array of locations for the gems to start from
+    // an array of Y locations for the gems to start from
     this.initiaYlLocationArray = [55, 145, 245];
-    // location of enemy on the Y axis
+    // location of gem on the Y axis
     this.y = this.initiaYlLocationArray[this.ranNumForLocation];
-    //this.y = this.initiaYlLocationArray[0];
+   // an array of X location fot the gems to start from
     this.initiaXlLocationArray = [0, 100, 200, 300, 400];
     this.ranNumForLocation = Math.floor(Math.random() * 5);
+    //location of gem on X axis
     this.x = this.initiaXlLocationArray[this.ranNumForLocation];
-    //this.x = this.initiaXlLocationArray[4];
+ 
   }
 
   update() {
@@ -187,38 +182,38 @@ class Gem {
     } else if (this.x < 510) {
       this.col = 7;
     }
-    //  console.log( this.sprite + "col "+ this.col + " row  "+ this.row + " x " + this.x + " y "+ this.y)
-
-    // Monitors collisions by comparing the player's and the gem's columns and rows
+ 
+    // Monitors winning the gem by comparing the player's and the gem's columns and rows
     for (const gem of allGems) {
-      // console.log(" gem col"+ this.col + " gem row" + this.row , gem)
-      // console.log(" player col"+ player.col + " player row >>>>>>" + player.row)
-    
       if (this.col === player.col && this.row === player.row) {
+          //hide the gem
         this.x = -200;
         this.y = -200;
         this.col = -1;
         this.row = -1;
+        //increase suer score
         player.score++;
         document.querySelector("#gems").innerHTML = player.score;
-
+        // create new gem after user win a gem
         this.createNewGem(1);
-        //  console.log(" gem col"+ this.col + " gem row" + this.row , gem)
-        //  console.log(" player col"+ player.col + " player row >>>>>>" + player.row)
-        //   console.log("winnnnn score"+player.score)
+
       }
     }
   }
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
+  //this method is used when user win a new gem
   createNewGem(limit){
     for(let i= 0; i< limit ; i++){
         allGems.push(new Gem())
     }
   }
-  reset(){
-    this.createNewGem(3) 
+  //this method is used when reset the game
+  static reset(limit){
+    for(let i= 0; i< limit ; i++){
+        allGems.push(new Gem())
+    }
     
  }
 }
@@ -237,7 +232,7 @@ setInterval(function() {
 
 let player = new Player();
 let allGems = [];
-
+//creaet array of gems
 allGems.push(new Gem());
 allGems.push(new Gem());
 allGems.push(new Gem());
