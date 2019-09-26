@@ -1,5 +1,6 @@
 // Enemies our player must avoid
-var Enemy = function(x, y) {
+class Enemy {
+  constructor(x, y) {
   // Variables applied to each of our instances go here,
   // location of enemy on the X axis
   this.x = 0;
@@ -21,11 +22,11 @@ var Enemy = function(x, y) {
   this.row = null;
   // column of canvas, in which the enemy is in
   this.col = 1;
-};
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
+  update(dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
@@ -69,12 +70,13 @@ Enemy.prototype.update = function(dt) {
  
     }
   }
-};
+}
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+  // Draw the enemy on the screen, required method for game
+  render () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+}
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -105,22 +107,29 @@ class Player {
   handleInput(keyCode) {
     switch (keyCode) {
       case "left":
-        this.x = this.x - 100;
-        this.col -= 1;
+        if (this.x > 4) {
+          this.x = this.x - 100;
+          this.col -= 1;
+        }
         break;
       case "up": //up
-        this.y = this.y - 83;
-        this.row -= 1;
-        break;
+        if (this.y > -20) {
+          this.y = this.y - 83;
+          this.row -= 1;
+          break;
+        }
       case "right": //right
-        this.x = this.x + 100;
-        this.col += 1;
-
-        break;
+        if (this.x < 396) {
+          this.x = this.x + 100;
+          this.col += 1;
+          break;
+        }
       case "down": //down
-        this.y = this.y + 83;
-        this.row += 1;
-        break;
+        if (this.y < 380) {
+          this.y = this.y + 83;
+          this.row += 1;
+          break;
+        }
     }
     
   }
@@ -232,7 +241,7 @@ setInterval(function() {
 
 let player = new Player();
 let allGems = [];
-//creaet array of gems
+//create array of gems
 allGems.push(new Gem());
 allGems.push(new Gem());
 allGems.push(new Gem());
